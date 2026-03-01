@@ -1,5 +1,6 @@
 import supabase from "@/lib/db";
 import FacultySelect from "@/components/faculty-select";
+import DatePicker from "@/components/date-picker";
 
 async function getFaculties() {
   const { data, error } = await supabase
@@ -13,7 +14,6 @@ async function getFaculties() {
 
 export default async function Home() {
   const faculties = await getFaculties();
-  console.log(faculties);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -27,6 +27,7 @@ export default async function Home() {
           </p>
         </div>
         <FacultySelect faculties={faculties} />
+        <DatePicker />
       </main>
     </div>
   );
