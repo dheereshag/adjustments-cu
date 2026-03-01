@@ -34,7 +34,10 @@ export default function DatePicker() {
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={(day) => {
+              setDate(day);
+              console.log(day ? format(day, "EEE") : undefined);
+            }}
             defaultMonth={date}
           />
         </PopoverContent>
