@@ -60,9 +60,9 @@ The regular (fixed) timetable for each faculty — what slots they are already o
 | `slot_id_2` | `SMALLINT` | FK → `slots.slot_number`, NULLABLE | Second slot if it's a double (e.g. slots 1 & 2) |
 | `class_name` | `VARCHAR(50)` | | e.g. `23AML-3` |
 | `block_name` | `block_enum` | NOT NULL | |
-| `room_number` | `INT` | | e.g. `411` |
-| `course_code` | `VARCHAR(30)` | | e.g. `23CSP-378` |
-| `course_name` | `VARCHAR(100)` | | e.g. `CC-II` |
+| `room_number` | `SMALLINT` | | e.g. `411` |
+| `course_code` | `VARCHAR(10)` | | e.g. `23CSP-378` |
+| `course_name` | `VARCHAR(10)` | | e.g. `CC-II` |
 | `group` | `group_enum` | NOT NULL | |
 
 **Unique constraint:** `(faculty_id, day, slot_id)` — a faculty cannot be in two places at the same slot.
