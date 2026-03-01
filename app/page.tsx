@@ -2,14 +2,27 @@ import supabase from "@/lib/db";
 import FacultySelect from "@/components/faculty-select";
 import DatePicker from "@/components/date-picker";
 
+type Faculty = {
+  id: number;
+  name: string;
+};
+
+const fallbackFaculties: Faculty[] = [
+  { id: 19078, name: "Anchita Panjeta" },
+  { id: 19842, name: "Dheeresh Agarwal" },
+];
+
 async function getFaculties() {
   const { data, error } = await supabase
     .from("faculties")
     .select("id, name")
     .order("name");
 
-  if (error) throw new Error(error.message);
-  return data as { id: number; name: string }[];
+  if (error || !data) {
+    return fallbackFaculties;
+  }
+
+  return data as Faculty[];
 }
 
 export default async function Home() {
