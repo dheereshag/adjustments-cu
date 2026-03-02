@@ -56,7 +56,11 @@ export function RequestDialog({
     setSubmitting(false);
 
     if (insertErr) {
-      setError(insertErr.message);
+      if (insertErr.code === "23505") {
+        setError("You have already sent a request for this slot.");
+      } else {
+        setError(insertErr.message);
+      }
       return;
     }
 
