@@ -3,11 +3,17 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import supabase from "@/lib/db";
-import type { Faculty, Slot, FacultyFreeSlots } from "@/lib/types";
+import type {
+  Faculty,
+  Slot,
+  FacultyFreeSlots,
+  AdjustmentRequest,
+} from "@/lib/types";
 import FacultySelect from "./faculty-select";
 import DatePicker from "./date-picker";
 import { BusySlots, BusySlotsSkeleton } from "./busy-slots";
 import { ResultsTable, ResultsTableSkeleton } from "./results-table";
+import { MyRequests, MyRequestsSkeleton } from "./my-requests";
 
 const VALID_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
 type DayEnum = (typeof VALID_DAYS)[number];
@@ -24,6 +30,34 @@ export default function AdjustmentFinder({
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [busySlots, setBusySlots] = useState<Slot[]>([]);
   const [results, setResults] = useState<FacultyFreeSlots[] | null>(null);
+  const [myRequests, setMyRequests] = useState<AdjustmentRequest[] | null>(
+    null,
+  );
+  const [requestsLoading, setRequestsLoading] = useState(false);
+
+  function fetchRequests(facultyId: number) {
+    setRequestsLoading(true);
+    supabase
+      .from("adjustment_requests")
+      .select(
+        "id, target_faculty_id, day, slot_id, status, requested_at, reason, slots(slot_number, start_time, end_time)",
+      )
+      .eq("requested_by_faculty_id", facultyId)
+      .order("requested_at", { ascending: false })
+      .then(({ data, error: reqErr }) => {
+        setRequestsLoading(false);
+        if (!reqErr)
+          setMyRequests((data ?? []) as unknown as AdjustmentRequest[]);
+      });
+  }
+
+  useEffect(() => {
+    if (!selectedFacultyId) {
+      setMyRequests(null);
+      return;
+    }
+    fetchRequests(parseInt(selectedFacultyId));
+  }, [selectedFacultyId]);
 
   useEffect(() => {
     if (!selectedFacultyId || !selectedDate) return;
@@ -128,11 +162,26 @@ export default function AdjustmentFinder({
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <FacultySelect
-        faculties={faculties}
-        onValueChange={setSelectedFacultyId}
-      />
-      <DatePicker onDateChange={setSelectedDate} />
+      <div className="flex items-center gap-4">
+        <div className="flex-1">
+          <FacultySelect
+            faculties={faculties}
+            onValueChange={setSelectedFacultyId}
+          />
+        </div>
+        <DatePicker onDateChange={setSelectedDate} />
+      </div>
+
+      {(requestsLoading || myRequests !== null) && (
+        <>
+          {requestsLoading ? (
+            <MyRequestsSkeleton />
+          ) : (
+            <MyRequests requests={myRequests!} faculties={faculties} />
+          )}
+          <div className="h-px w-full bg-zinc-100 dark:bg-zinc-800" />
+        </>
+      )}
 
       {error && <p className="text-sm text-red-500">{error}</p>}
 
@@ -158,6 +207,7 @@ export default function AdjustmentFinder({
               facultyName={requestingFaculty.name}
               day={selectedDay}
               requestingFacultyId={parseInt(selectedFacultyId)}
+              onRequestSent={() => fetchRequests(parseInt(selectedFacultyId))}
             />
           )}
         </div>

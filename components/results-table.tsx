@@ -7,6 +7,7 @@ interface ResultsTableProps {
   facultyName: string;
   day: string;
   requestingFacultyId: number;
+  onRequestSent?: () => void;
 }
 
 export function ResultsTableSkeleton() {
@@ -38,6 +39,7 @@ export function ResultsTable({
   facultyName,
   day,
   requestingFacultyId,
+  onRequestSent,
 }: ResultsTableProps) {
   if (results.length === 0) {
     return (
@@ -93,6 +95,7 @@ export function ResultsTable({
                         targetFaculty={faculty}
                         slot={slot}
                         day={day}
+                        onRequestSent={onRequestSent}
                       />
                     ))}
                   </div>

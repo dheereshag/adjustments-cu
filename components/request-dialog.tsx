@@ -25,6 +25,7 @@ interface RequestDialogProps {
   targetFaculty: Faculty;
   slot: Slot;
   day: string;
+  onRequestSent?: () => void;
 }
 
 export function RequestDialog({
@@ -32,6 +33,7 @@ export function RequestDialog({
   targetFaculty,
   slot,
   day,
+  onRequestSent,
 }: RequestDialogProps) {
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
@@ -65,6 +67,7 @@ export function RequestDialog({
     }
 
     setSubmitted(true);
+    onRequestSent?.();
   }
 
   function handleOpenChange(next: boolean) {
