@@ -11,7 +11,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function DatePicker() {
+interface DatePickerProps {
+  onDateChange?: (date: Date | undefined) => void;
+}
+
+export default function DatePicker({ onDateChange }: DatePickerProps) {
   const [date, setDate] = React.useState<Date>();
 
   return (
@@ -36,7 +40,7 @@ export default function DatePicker() {
             selected={date}
             onSelect={(day) => {
               setDate(day);
-              console.log(day ? format(day, "EEE") : undefined);
+              onDateChange?.(day);
             }}
             defaultMonth={date}
           />

@@ -1,11 +1,6 @@
 import supabase from "@/lib/db";
-import FacultySelect from "@/components/faculty-select";
-import DatePicker from "@/components/date-picker";
-
-type Faculty = {
-  id: number;
-  name: string;
-};
+import AdjustmentFinder from "@/components/adjustment-finder";
+import type { Faculty } from "@/lib/types";
 
 async function getFaculties() {
   const { data, error } = await supabase
@@ -31,11 +26,11 @@ export default async function Home() {
             Adjustment Finder
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Select the faculty member who is requesting an adjustment.
+            Select the requesting faculty and a date to find available faculties
+            for adjustment.
           </p>
         </div>
-        <FacultySelect faculties={faculties} />
-        <DatePicker />
+        <AdjustmentFinder faculties={faculties} />
       </main>
     </div>
   );
