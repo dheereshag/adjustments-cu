@@ -182,7 +182,7 @@ export default function AdjustmentFinder({
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <div className="flex items-center gap-4">
+      <div className="flex items-end gap-3">
         <div className="flex-1">
           <FacultySelect
             faculties={faculties}

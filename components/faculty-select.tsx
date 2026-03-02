@@ -36,7 +36,7 @@ export default function FacultySelect({
         type="faculty"
         onValueChange={onValueChange}
       >
-        <ComboboxTrigger className="w-72" />
+        <ComboboxTrigger className="w-full" />
         <ComboboxContent>
           <ComboboxInput />
           <ComboboxEmpty />
