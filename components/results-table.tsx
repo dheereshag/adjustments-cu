@@ -1,26 +1,12 @@
-import type { FacultyFreeSlots, Slot } from "@/lib/types";
+import type { FacultyFreeSlots } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Pill } from "@/components/kibo-ui/pill";
-
-function formatTime(t: string) {
-  return t.slice(0, 5);
-}
+import { RequestDialog } from "./request-dialog";
 
 interface ResultsTableProps {
   results: FacultyFreeSlots[];
   facultyName: string;
   day: string;
-}
-
-function SlotBadge({ slot }: { slot: Slot }) {
-  return (
-    <Pill className="bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 hover:bg-emerald-50 dark:bg-emerald-950 dark:text-emerald-300 dark:ring-emerald-500/20">
-      <span className="font-medium">Slot {slot.slot_number}</span>
-      <span className="text-emerald-500">
-        {formatTime(slot.start_time)}–{formatTime(slot.end_time)}
-      </span>
-    </Pill>
-  );
+  requestingFacultyId: number;
 }
 
 export function ResultsTableSkeleton() {
@@ -47,7 +33,12 @@ export function ResultsTableSkeleton() {
   );
 }
 
-export function ResultsTable({ results, facultyName, day }: ResultsTableProps) {
+export function ResultsTable({
+  results,
+  facultyName,
+  day,
+  requestingFacultyId,
+}: ResultsTableProps) {
   if (results.length === 0) {
     return (
       <p className="text-sm text-zinc-400">
@@ -96,7 +87,13 @@ export function ResultsTable({ results, facultyName, day }: ResultsTableProps) {
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1.5">
                     {freeSlots.map((slot) => (
-                      <SlotBadge key={slot.slot_number} slot={slot} />
+                      <RequestDialog
+                        key={slot.slot_number}
+                        requestingFacultyId={requestingFacultyId}
+                        targetFaculty={faculty}
+                        slot={slot}
+                        day={day}
+                      />
                     ))}
                   </div>
                 </td>

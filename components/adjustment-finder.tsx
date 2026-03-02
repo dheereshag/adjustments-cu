@@ -157,6 +157,7 @@ export default function AdjustmentFinder({
               results={results}
               facultyName={requestingFaculty.name}
               day={selectedDay}
+              requestingFacultyId={parseInt(selectedFacultyId)}
             />
           )}
         </div>
