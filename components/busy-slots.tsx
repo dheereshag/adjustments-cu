@@ -41,7 +41,7 @@ export function BusySlots({ facultyName, day, slots }: BusySlotsProps) {
             <Pill key={slot.slot_number} variant="secondary">
               <span className="font-bold">Slot {slot.slot_number}</span>
               <span className="text-muted-foreground">
-                {formatTime(slot.start_time)}–{formatTime(slot.end_time)}
+                {formatTime(slot.start_time)}-{formatTime(slot.end_time)}
               </span>
             </Pill>
           ))}
