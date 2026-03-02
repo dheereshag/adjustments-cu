@@ -43,7 +43,27 @@ id=8  15:35–16:25
 
 ---
 
-### 3. `schedules`
+### 3. `courses`
+Normalised lookup table for course codes and their full names.
+
+| Column | Type | Constraints | Notes |
+|---|---|---|---|
+| `code` | `VARCHAR(10)` | PRIMARY KEY | e.g. `23CSP-378` |
+| `name` | `VARCHAR(50)` | NOT NULL | e.g. `CC-II` |
+
+**Seed data** (derived from faculty schedules):
+
+| code | name |
+|---|---|
+| `23CSP-378` | `CC-II` |
+| `23CSH-382` | `FS-II` |
+| `24CSP-283` | `CC-I` |
+| `24CSP-293` | `FS-I` |
+| `24CSP-370` | `FS-1` |
+
+---
+
+### 4. `schedules`
 The regular (fixed) timetable for each faculty — what slots they are already occupied in.
 
 **Enums used:**
@@ -60,8 +80,7 @@ The regular (fixed) timetable for each faculty — what slots they are already o
 | `class_name` | `VARCHAR(50)` | | e.g. `23AML-3` |
 | `block_name` | `block_enum` | NOT NULL | |
 | `room_number` | `SMALLINT` | | e.g. `411` |
-| `course_code` | `VARCHAR(10)` | | e.g. `23CSP-378` |
-| `course_name` | `VARCHAR(10)` | | e.g. `CC-II` |
+| `course_code` | `VARCHAR(10)` | FK → `courses.code` | e.g. `23CSP-378` |
 | `group` | `group_enum` | NOT NULL | |
 
 **Unique constraint:** `(faculty_id, day, slot_id)` — a faculty cannot be in two places at the same slot.
@@ -102,6 +121,7 @@ faculties ──< adjustment_requests    (requested_by_faculty_id → faculties.
 faculties ──< adjustment_requests    (target_faculty_id → faculties.id)
 slots     ──< schedules              (slot_id → slots.slot_number)
 slots     ──< adjustment_requests    (slot_id → slots.slot_number)
+courses   ──< schedules              (course_code → courses.code)
 ```
 
 ---
