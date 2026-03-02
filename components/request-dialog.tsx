@@ -60,6 +60,11 @@ export function RequestDialog({
     if (insertErr) {
       if (insertErr.code === "23505") {
         setError("You have already sent a request for this slot.");
+      } else if (
+        insertErr.code === "P0001" &&
+        insertErr.message === "slot_already_taken"
+      ) {
+        setError("This slot has already been approved for someone else.");
       } else {
         setError(insertErr.message);
       }
