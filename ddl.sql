@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS schedules (
     slot_id SMALLINT NOT NULL REFERENCES slots(slot_number),
     class_name VARCHAR(50),
     block_name block_enum NOT NULL,
-    room_number SMALLINT,
+    room_number VARCHAR(5),
     course_code VARCHAR(10) REFERENCES courses(code),
     "group" group_enum NOT NULL,
     UNIQUE(faculty_id, day, slot_id)
